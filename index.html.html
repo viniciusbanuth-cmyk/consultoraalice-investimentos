@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alice — Consultora APARD</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gdk:#1D3828;--gmd:#2a4f38;--glt:#638968;
+  --gold:#C8B560;--gold-lt:#ddd09a;
+  --cream:#EEEAD6;--cream-alt:#f5f2e4;
+  --text:#2c2c2c;--muted:#6b6b6b;
+}
+html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;}
+body{background:#1a2a1e;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.app{display:flex;flex-direction:column;width:100%;max-width:440px;height:100vh;max-height:820px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.5);}
+
+/* HEADER */
+.hdr{background:var(--gdk);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;border-bottom:2px solid var(--gold);}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a8913a);border:2px solid var(--gold-lt);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:17px;color:var(--gdk);font-weight:600;flex-shrink:0;}
+.hdr-info{flex:1;}
+.hdr-name{font-size:15px;font-weight:600;color:var(--cream);letter-spacing:.3px;}
+.hdr-sub{font-size:10px;color:var(--gold-lt);letter-spacing:.5px;margin-top:1px;display:flex;align-items:center;gap:5px;}
+.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hdr-brand{font-family:'Fraunces',serif;font-size:10px;color:var(--gold);letter-spacing:3px;opacity:.7;}
+.hdr-badge{background:rgba(200,181,96,.15);border:1px solid rgba(200,181,96,.3);border-radius:4px;padding:3px 8px;font-size:9px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;}
+
+/* WELCOME */
+.welcome{flex:1;background:#ece5d8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:16px;text-align:center;}
+.wlc-av{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a8913a);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:30px;color:var(--gdk);font-weight:600;box-shadow:0 8px 24px rgba(200,181,96,.3);}
+.wlc-name{font-family:'Fraunces',serif;font-size:22px;color:var(--gdk);font-weight:600;}
+.wlc-role{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--glt);}
+.wlc-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:300px;}
+.wlc-tags{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:4px;}
+.tag{background:#fff;border:1px solid #ddd8c4;border-radius:20px;padding:5px 12px;font-size:11px;color:var(--gdk);font-weight:500;}
+.start-btn{background:var(--gdk);color:var(--cream);border:none;border-radius:10px;padding:13px 32px;font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.5px;cursor:pointer;transition:background .2s,transform .1s;margin-top:8px;}
+.start-btn:hover{background:var(--gmd);}
+.start-btn:active{transform:scale(.97);}
+.quick-title{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--glt);}
+.quick-btns{display:flex;flex-direction:column;gap:7px;width:100%;}
+.quick-btn{background:#fff;border:1.5px solid #ddd8c4;border-radius:10px;padding:10px 14px;font-size:12px;color:var(--gdk);font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;text-align:left;transition:all .2s;font-weight:500;}
+.quick-btn:hover{border-color:var(--gold);background:var(--cream-alt);}
+
+/* CHAT */
+.chat-screen{flex:1;display:none;flex-direction:column;overflow:hidden;}
+.chat-screen.active{display:flex;}
+.msgs{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:8px;background:#ece5d8;}
+.msgs::-webkit-scrollbar{width:3px;}
+.msgs::-webkit-scrollbar-thumb{background:#ccc9b4;border-radius:2px;}
+
+.msg-wrap{display:flex;flex-direction:column;animation:msgIn .22s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg-wrap.alice{align-items:flex-start;}
+.msg-wrap.user{align-items:flex-end;}
+.msg-sender{font-size:10px;font-weight:600;letter-spacing:.8px;margin-bottom:3px;padding:0 4px;}
+.msg-wrap.alice .msg-sender{color:var(--gold);}
+.msg-wrap.user  .msg-sender{color:#8a7b3a;}
+.bubble{max-width:84%;padding:9px 13px;border-radius:16px;font-size:13.5px;line-height:1.65;word-break:break-word;}
+.msg-wrap.alice .bubble{background:#fff;color:var(--text);border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+.msg-wrap.user  .bubble{background:#dcf8c6;color:var(--text);border-bottom-right-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+.msg-time{font-size:10px;color:#aaa;margin-top:2px;padding:0 4px;}
+.sys-msg{text-align:center;font-size:10.5px;color:#aaa;background:rgba(255,255,255,.55);border-radius:10px;padding:4px 12px;align-self:center;}
+
+/* TYPING */
+.typing-wrap{padding:0 14px 8px;display:none;}
+.typing-wrap.on{display:flex;flex-direction:column;align-items:flex-start;gap:3px;}
+.typing-lbl{font-size:10px;font-weight:600;letter-spacing:.8px;color:var(--gold);padding:0 4px;}
+.typing-bub{background:#fff;border-radius:16px;border-bottom-left-radius:4px;padding:11px 14px;display:flex;gap:4px;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+.td{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:td 1.2s infinite;}
+.td:nth-child(2){animation-delay:.2s}
+.td:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+
+/* INPUT */
+.input-area{background:#f0ede0;border-top:1px solid #ddd8c4;padding:9px 10px;display:flex;align-items:flex-end;gap:8px;flex-shrink:0;}
+.input-box{flex:1;background:#fff;border:1px solid #ccc9b4;border-radius:22px;padding:9px 15px;font-size:13.5px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);outline:none;resize:none;max-height:90px;line-height:1.5;transition:border-color .2s;}
+.input-box:focus{border-color:var(--gold);}
+.input-box::placeholder{color:#bbb;}
+.send-btn{width:42px;height:42px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s,transform .1s;}
+.send-btn:hover{opacity:.85;}
+.send-btn:active{transform:scale(.93);}
+.send-btn svg{width:19px;height:19px;fill:var(--gdk);}
+.back-btn{background:none;border:1px solid rgba(200,181,96,.35);border-radius:6px;color:var(--gold);font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;padding:5px 11px;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.back-btn:hover{background:rgba(200,181,96,.1);}
+
+@media(max-width:500px){
+  body{background:#ece5d8;}
+  .app{max-width:100%;height:100vh;max-height:100vh;border-radius:0;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="hdr">
+    <div class="av">A</div>
+    <div class="hdr-info">
+      <div class="hdr-name">Alice</div>
+      <div class="hdr-sub"><span class="dot"></span>Consultora de Investimentos</div>
+    </div>
+    <div class="hdr-badge">Área de Membros</div>
+  </div>
+
+  <!-- WELCOME -->
+  <div class="welcome" id="welcomeScreen">
+    <div class="wlc-av">A</div>
+    <div class="wlc-name">Alice</div>
+    <div class="wlc-role">Consultora de Investimentos · APARD Capital</div>
+    <div class="wlc-desc">Tire suas dúvidas sobre mercado financeiro, análise de ativos, estratégias de carteira e muito mais.</div>
+    <div class="wlc-tags">
+      <span class="tag">Renda Fixa</span>
+      <span class="tag">Ações & FIIs</span>
+      <span class="tag">Análise Fundamentalista</span>
+      <span class="tag">Carteira</span>
+      <span class="tag">IR sobre Investimentos</span>
+    </div>
+
+    <div class="quick-title" style="margin-top:8px;">Perguntas frequentes</div>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="startWithMsg('Como monto uma carteira para longo prazo?')">Como monto uma carteira para longo prazo?</button>
+      <button class="quick-btn" onclick="startWithMsg('Qual a diferença entre Tesouro IPCA+ e CDB?')">Qual a diferença entre Tesouro IPCA+ e CDB?</button>
+      <button class="quick-btn" onclick="startWithMsg('Vale a pena investir em FIIs com a Selic alta?')">Vale a pena investir em FIIs com a Selic alta?</button>
+      <button class="quick-btn" onclick="startWithMsg('O que devo olhar antes de comprar uma ação?')">O que devo olhar antes de comprar uma ação?</button>
+    </div>
+    <button class="start-btn" onclick="startChat()">Fazer uma pergunta →</button>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-screen" id="chatScreen">
+    <div class="msgs" id="msgs"></div>
+    <div class="typing-wrap" id="typing">
+      <div class="typing-lbl">Alice</div>
+      <div class="typing-bub">
+        <div class="td"></div><div class="td"></div><div class="td"></div>
+      </div>
+    </div>
+    <div class="input-area">
+      <button class="back-btn" onclick="goBack()">← Início</button>
+      <textarea class="input-box" id="input" placeholder="Pergunte sobre investimentos..." rows="1"></textarea>
+      <button class="send-btn" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+<script>
+const PROMPT = `Você se chama Alice e é a Consultora de Investimentos da APARD Capital.
+
+Você foi criada para apoiar os alunos do Código do Investidor com dúvidas sobre mercado financeiro, análise de ativos, estratégias de carteira e educação financeira em geral.
+
+Seu criador é Marcos Banuth — consultor de valores mobiliários credenciado pela CVM e certificado CEA pela ANBIMA. Tagline da APARD: "Cuidar do que sustenta."
+
+Se perguntarem se você é IA, responda com honestidade: "Sou a Alice, consultora virtual da APARD Capital. Fui desenvolvida pelo Marcos para te apoiar aqui na plataforma."
+
+PERFIL E TOM:
+Você é uma especialista séria e acessível. Domina profundamente o mercado financeiro brasileiro e internacional. Fala com clareza, usa exemplos concretos e nunca deixa o aluno com dúvida sem resposta. Adapta a profundidade da resposta ao nível da pergunta — para perguntas simples, resposta direta; para perguntas complexas, análise completa.
+
+FORMATO DAS RESPOSTAS:
+- Respostas objetivas e bem estruturadas
+- Para respostas mais longas, organize em partes curtas com quebras de linha
+- Pode usar numeração (1. 2. 3.) quando for listar comparativos ou passos
+- Sem markdown pesado: sem # títulos ou **negrito excessivo**
+- Emojis: apenas quando reforçarem o tom, no máximo 1 por resposta
+- Linguagem: português brasileiro, sem jargão desnecessário, mas sem simplificar demais
+
+CONHECIMENTO E ESPECIALIDADES:
+Renda Fixa: CDB, Tesouro Direto (Selic, IPCA+, Pré-Fixado), LCI, LCA, CRI, CRA, debêntures, poupança. Comparativos, liquidez, tributação, marcação a mercado.
+Renda Variável: ações, FIIs, ETFs, BDRs, opções. Análise fundamentalista (P/L, P/VP, ROE, DY, EV/EBITDA), análise técnica básica, valuation, setores.
+Fundos: fundos de renda fixa, multimercado, ações, FIPs, FIIs. Taxas, benchmarks, estratégias.
+Macroeconomia: Selic, CDI, IPCA, câmbio, ciclos econômicos, política monetária, impacto nos ativos.
+Planejamento: reserva de emergência, aposentadoria, independência financeira, alocação por perfil, rebalanceamento de carteira.
+Tributação: tabela regressiva de IR, come-cotas, isenções (LCI, LCA, CRI, CRA, FIIs, ações até R$20k/mês), DARF, declaração no IR.
+Internacional: BDRs, ETFs globais, diversificação internacional, risco cambial.
+
+LIMITES REGULATÓRIOS — IMPORTANTES:
+- Nunca diga "compre X" ou "venda Y" de forma imperativa. A decisão de compra é sempre do investidor.
+- Pode analisar, comparar, explicar pontos fortes e fracos de um ativo — mas sempre finalize com "a decisão final é sua, considerando seu perfil e objetivos."
+- Nunca prometa rentabilidade ou retorno garantido.
+- Se o aluno pedir uma recomendação direta de carteira completa, ofereça critérios e metodologia — não uma lista de ativos para comprar.
+- Para análises de ativos específicos: use dados históricos e fundamentos conhecidos. Se precisar de dados em tempo real (cotação atual, último balanço), deixe claro que não tem acesso a dados ao vivo e oriente onde buscar (B3, Status Invest, Fundamentus).
+
+COMO RESPONDER PERGUNTAS SOBRE ATIVOS ESPECÍFICOS:
+Quando o aluno perguntar sobre uma ação ou FII específico (ex: "o que você acha de PETR4?"):
+1. Analise o setor e o contexto macro
+2. Apresente os principais indicadores fundamentalistas conhecidos
+3. Aponte pontos positivos e riscos
+4. Oriente sobre o que verificar antes de decidir
+5. Finalize lembrando que a decisão é do investidor conforme seu perfil
+
+POSTURA:
+- Nunca diga que não sabe sem tentar ajudar
+- Se a pergunta for fora do escopo financeiro, redirecione gentilmente para temas de investimentos
+- Se o aluno estiver tomando uma decisão arriscada, alerte com respeito — nunca de forma alarmista
+- Incentive o aluno a aprofundar o conhecimento — você está aqui para orientar, não para decidir por ele`;
+
+let historico = [];
+
+function getTime() {
+  return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function addMsg(texto, papel) {
+  const msgs = document.getElementById('msgs');
+  const wrap = document.createElement('div');
+  wrap.className = `msg-wrap ${papel}`;
+  const sender = document.createElement('div');
+  sender.className = 'msg-sender';
+  sender.textContent = papel === 'alice' ? 'Alice' : 'Você';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = texto;
+  const time = document.createElement('div');
+  time.className = 'msg-time';
+  time.textContent = getTime();
+  wrap.appendChild(sender);
+  wrap.appendChild(bubble);
+  wrap.appendChild(time);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addSys(txt) {
+  const msgs = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'sys-msg';
+  d.textContent = txt;
+  msgs.appendChild(d);
+}
+
+function setTyping(on) {
+  document.getElementById('typing').className = 'typing-wrap' + (on ? ' on' : '');
+  if(on) document.getElementById('msgs').scrollTop = 99999;
+}
+
+async function callAlice(msg) {
+  const msgs = [];
+  historico.forEach(h => {
+    msgs.push({ role: h.papel === 'user' ? 'user' : 'assistant', content: h.texto });
+  });
+  msgs.push({ role: 'user', content: msg });
+
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system: PROMPT, messages: msgs })
+  });
+  const data = await res.json();
+  return data.content?.[0]?.text || 'Desculpe, tente novamente.';
+}
+
+function showChat() {
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('chatScreen').className = 'chat-screen active';
+  document.getElementById('msgs').innerHTML = '';
+  addSys('Alice · Consultora de Investimentos APARD');
+}
+
+function startChat() {
+  showChat();
+  document.getElementById('input').focus();
+}
+
+async function startWithMsg(msg) {
+  showChat();
+  addMsg(msg, 'user');
+  historico.push({ papel: 'user', texto: msg });
+  setTyping(true);
+  try {
+    const resp = await callAlice(msg);
+    setTyping(false);
+    addMsg(resp, 'alice');
+    historico.push({ papel: 'alice', texto: resp });
+  } catch(e) {
+    setTyping(false);
+    addMsg('Erro de conexão. Tente novamente.', 'alice');
+  }
+}
+
+async function sendMsg() {
+  const inp = document.getElementById('input');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  inp.value = '';
+  inp.style.height = 'auto';
+  addMsg(txt, 'user');
+  historico.push({ papel: 'user', texto: txt });
+  setTyping(true);
+  try {
+    const resp = await callAlice(txt);
+    setTyping(false);
+    addMsg(resp, 'alice');
+    historico.push({ papel: 'alice', texto: resp });
+  } catch(e) {
+    setTyping(false);
+    addMsg('Erro de conexão. Tente novamente.', 'alice');
+  }
+}
+
+function goBack() {
+  historico = [];
+  document.getElementById('chatScreen').className = 'chat-screen';
+  document.getElementById('welcomeScreen').style.display = '';
+}
+
+document.getElementById('input').addEventListener('input', function(){
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 90) + 'px';
+});
+document.getElementById('input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); }
+});
+</script>
+</body>
+</html>
